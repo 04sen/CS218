@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
- */
-package rpsls;
 
 import java.io.*;
 import java.net.*;
 
 public class server {
-
-    
     public static void main(String args[]) throws IOException {
         Socket socket = null;
         InputStreamReader inputStreamReader = null;
