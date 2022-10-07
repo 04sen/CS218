@@ -1,5 +1,14 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
+
 
 public class GameFrame extends JFrame implements ActionListener{
     JButton rock_btn = new JButton();
@@ -18,13 +27,17 @@ public class GameFrame extends JFrame implements ActionListener{
     JLabel lizard_lb = new JLabel();
     ImageIcon spock_img = new ImageIcon("Imgs\\spock.png");
     JLabel spock_lb = new JLabel();
-    
-
-    public static void main(String[] args){
+   
+    public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
         new GameFrame();
     }
 
-    public GameFrame(){
+    public GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+
+        File file = new File("Audio\\background.wav");
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
 
         //Labels
         rock_lb.setText("You have chosen Rock!");
@@ -109,6 +122,8 @@ public class GameFrame extends JFrame implements ActionListener{
         this.add(scissors_lb);
         this.add(lizard_lb);
         this.add(spock_lb);
+
+        clip.start();
     }
 
     @Override
