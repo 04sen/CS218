@@ -8,15 +8,15 @@ public class GameFrame extends JFrame implements ActionListener{
     JButton lizard_btn = new JButton();
     JButton spock_btn = new JButton();
 
-    ImageIcon rock_img = new ImageIcon("RPSLS\\Imgs\\Rock.png");
+    ImageIcon rock_img = new ImageIcon("Imgs\\Rock.png");
     JLabel rock_lb = new JLabel();
-    ImageIcon paper_img = new ImageIcon("RPSLS\\Imgs\\paper.png");
+    ImageIcon paper_img = new ImageIcon("Imgs\\paper.png");
     JLabel paper_lb = new JLabel();
-    ImageIcon scissors_img = new ImageIcon("RPSLS\\Imgs\\scissors.png");
+    ImageIcon scissors_img = new ImageIcon("Imgs\\scissors.png");
     JLabel scissors_lb = new JLabel();
-    ImageIcon lizard_img = new ImageIcon("RPSLS\\Imgs\\lizard.png");
+    ImageIcon lizard_img = new ImageIcon("Imgs\\lizard.png");
     JLabel lizard_lb = new JLabel();
-    ImageIcon spock_img = new ImageIcon("RPSLS\\Imgs\\spock.png");
+    ImageIcon spock_img = new ImageIcon("Imgs\\spock.png");
     JLabel spock_lb = new JLabel();
     
 
