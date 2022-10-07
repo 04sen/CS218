@@ -1,81 +1,77 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package socketprogramming;
+package rpsls;
+
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 
 /**
  *
  * @author PC
  */
-// A Java program for a Client
-import java.net.*;
-import java.io.*;
+public class client {
 
-public class client
-{
+  public static void main(String[] args){
+      
 	// initialize socket and input output streams
-	private Socket socket		 = null;
-	private DataInputStream input = null;
-	private DataOutputStream out	 = null;
+	Socket socket		 = null;
+	InputStreamReader inputStreamReader = null;
+        OutputStreamWriter outputStreamWriter = null;
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
+        
+        
 
-	// constructor to put ip address and port
-	public client(String address, int port)
-	{
 		// establish a connection
 		try
 		{
-			socket = new Socket(address, port);
-			System.out.println("Connected");
-
-			// takes input from terminal
-			input = new DataInputStream(System.in);
-
-			// sends output to the socket
-			out = new DataOutputStream(socket.getOutputStream());
-		}
-		catch(UnknownHostException u)
-		{
-			System.out.println(u);
-		}
-		catch(IOException i)
-		{
-			System.out.println(i);
-		}
-
-		// string to read message from input
-		String line = "";
-
-		// keep reading until "Over" is input
-		while (!line.equals("Over"))
-		{
-			try
-			{
-				line = input.readLine();
-				out.writeUTF(line);
-			}
-			catch(IOException i)
-			{
-				System.out.println(i);
-			}
-		}
-
-		// close the connection
-		try
-		{
-			input.close();
-			out.close();
-			socket.close();
-		}
-		catch(IOException i)
-		{
-			System.out.println(i);
-		}
-	}
-
-	public static void main(String args[])
-	{
-		client client = new client("localhost", 5000);
-	}
+			socket = new Socket ("localhost", 1234);
+                        
+                        inputStreamReader = new InputStreamReader (socket.getInputStream());
+                        outputStreamWriter = new OutputStreamWriter (socket.getOutputStream());
+                        
+                        bufferedReader = new BufferedReader(inputStreamReader);
+                        bufferedWriter = new BufferedWriter (outputStreamWriter);
+                        
+                        Scanner scanner = new Scanner (System.in);
+                        
+                        while (true) {
+                            String GameServerMessage = scanner.nextLine();
+                            
+                            bufferedWriter.write(GameServerMessage);
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
+                            
+                            System.out.println("Server: " + bufferedReader.readLine());
+                            
+                            if (GameServerMessage.equalsIgnoreCase("Over"))
+                                break;
+                            
+                        }
+                } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    } finally 
+                        {
+                            try {
+                                    if (socket!= null)
+                                        socket.close();
+                                    if (inputStreamReader != null)
+                                        inputStreamReader.close();
+                                    if (outputStreamWriter != null)
+                                        outputStreamWriter.close();
+                                    if (bufferedReader != null)
+                                        bufferedReader.close();
+                                    if (bufferedWriter != null)
+                                        bufferedWriter.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                         }
+         
+    }
+  
 }
-

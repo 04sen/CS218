@@ -2,73 +2,55 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
  */
-package socketprogramming;
+package rpsls;
 
-/**
- *
- * @author PC
- */
-// A Java program for a Server
-import java.net.*;
 import java.io.*;
+import java.net.*;
 
-public class server
-{
-	//initialize socket and input stream
-	private Socket		 socket = null;
-	private ServerSocket server = null;
-	private DataInputStream in	 = null;
+public class server {
 
-	// constructor with port
-	public server(int port)
-	{
-		// starts server and waits for a connection
-		try
-		{
-			server = new ServerSocket(port);
-			System.out.println("Server started");
-
-			System.out.println("Waiting for a client ...");
-
-			socket = server.accept();
-			System.out.println("Client accepted");
-
-			// takes input from the client socket
-			in = new DataInputStream(
-				new BufferedInputStream(socket.getInputStream()));
-                        
-            
-      
-			String line = "";
-
-			// reads message from client until "Over" is sent
-			while (!line.equals("Over"))
-			{
-				try
-				{
-					line = in.readUTF();
-					System.out.println(line);
-
-				}
-				catch(IOException i)
-				{
-					System.out.println(i);
-				}
-			}
-			System.out.println("Closing connection");
-
-			// close connection
-			socket.close();
-			in.close();
-		}
-		catch(IOException i)
-		{
-			System.out.println(i);
-		}
-	}
-
-	public static void main(String args[])
-	{
-		server server = new server(5000);
-	}
+    
+    public static void main(String args[]) throws IOException {
+        Socket socket = null;
+        InputStreamReader inputStreamReader = null;
+        OutputStreamWriter outputStreamWriter = null;
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
+        ServerSocket serverSocket = null;
+        
+        serverSocket = new ServerSocket (1234);
+        
+        while (true) {
+            try{
+                socket = serverSocket.accept();
+                
+                inputStreamReader = new InputStreamReader(socket.getInputStream());
+                outputStreamWriter = new OutputStreamWriter (socket.getOutputStream());
+                
+                bufferedReader = new BufferedReader(inputStreamReader);
+                bufferedWriter = new BufferedWriter(outputStreamWriter);
+                
+                while (true) {
+                    String PlayerMove = bufferedReader.readLine();
+                    
+                    System.out.println("Client: " + PlayerMove);
+                    
+                    bufferedWriter.write ("Move saved");
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    
+                    if (PlayerMove.equalsIgnoreCase("Quit"))
+                        break;
+                }
+                socket.close();
+                inputStreamReader.close();
+                outputStreamWriter.close();
+                bufferedReader.close();
+                bufferedWriter.close();
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
