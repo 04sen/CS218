@@ -2,22 +2,22 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class GameFrame extends JFrame implements ActionListener{
-    JButton button = new JButton();
-    JButton button2 = new JButton();
-    JButton button3 = new JButton();
-    JButton button4 = new JButton();
-    JButton button5 = new JButton();
+    JButton rock_btn = new JButton();
+    JButton paper_btn = new JButton();
+    JButton scissors_btn = new JButton();
+    JButton lizard_btn = new JButton();
+    JButton spock_btn = new JButton();
 
     ImageIcon rock_img = new ImageIcon("RPSLS\\Imgs\\Rock.png");
-    JLabel label = new JLabel();
+    JLabel rock_lb = new JLabel();
     ImageIcon paper_img = new ImageIcon("RPSLS\\Imgs\\paper.png");
-    JLabel label2 = new JLabel();
+    JLabel paper_lb = new JLabel();
     ImageIcon scissors_img = new ImageIcon("RPSLS\\Imgs\\scissors.png");
-    JLabel label3 = new JLabel();
+    JLabel scissors_lb = new JLabel();
     ImageIcon lizard_img = new ImageIcon("RPSLS\\Imgs\\lizard.png");
-    JLabel label4 = new JLabel();
+    JLabel lizard_lb = new JLabel();
     ImageIcon spock_img = new ImageIcon("RPSLS\\Imgs\\spock.png");
-    JLabel label5 = new JLabel();
+    JLabel spock_lb = new JLabel();
     
 
     public static void main(String[] args){
@@ -27,61 +27,61 @@ public class GameFrame extends JFrame implements ActionListener{
     public GameFrame(){
 
         //Labels
-        label.setText("You have chosen Rock!");
-        label.setIcon(rock_img);
-        label.setHorizontalTextPosition(JLabel.LEFT);
-        label.setBounds(350, 500, 500,130);
-        label.setVisible(false);
+        rock_lb.setText("You have chosen Rock!");
+        rock_lb.setIcon(rock_img);
+        rock_lb.setHorizontalTextPosition(JLabel.LEFT);
+        rock_lb.setBounds(350, 500, 500,130);
+        rock_lb.setVisible(false);
 
-        label2.setText("You have chosen Paper!");
-        label2.setIcon(paper_img);
-        label2.setHorizontalTextPosition(JLabel.LEFT);
-        label2.setBounds(350, 500, 500,130);
-        label2.setVisible(false);
+        paper_lb.setText("You have chosen Paper!");
+        paper_lb.setIcon(paper_img);
+        paper_lb.setHorizontalTextPosition(JLabel.LEFT);
+        paper_lb.setBounds(350, 500, 500,130);
+        paper_lb.setVisible(false);
 
-        label3.setText("You have chosen Scissors!");
-        label3.setIcon(scissors_img);
-        label3.setHorizontalTextPosition(JLabel.LEFT);
-        label3.setBounds(350, 500, 500,130);
-        label3.setVisible(false);
+        scissors_lb.setText("You have chosen Scissors!");
+        scissors_lb.setIcon(scissors_img);
+        scissors_lb.setHorizontalTextPosition(JLabel.LEFT);
+        scissors_lb.setBounds(350, 500, 500,130);
+        scissors_lb.setVisible(false);
 
-        label4.setText("You have chosen Lizard!");
-        label4.setIcon(lizard_img);
-        label4.setHorizontalTextPosition(JLabel.LEFT);
-        label4.setBounds(350, 500, 500,130);
-        label4.setVisible(false);
+        lizard_lb.setText("You have chosen Lizard!");
+        lizard_lb.setIcon(lizard_img);
+        lizard_lb.setHorizontalTextPosition(JLabel.LEFT);
+        lizard_lb.setBounds(350, 500, 500,130);
+        lizard_lb.setVisible(false);
 
-        label5.setText("You have chosen Spock!");
-        label5.setIcon(spock_img);
-        label5.setHorizontalTextPosition(JLabel.LEFT);
-        label5.setBounds(350, 500, 500,150);
-        label5.setVisible(false);
+        spock_lb.setText("You have chosen Spock!");
+        spock_lb.setIcon(spock_img);
+        spock_lb.setHorizontalTextPosition(JLabel.LEFT);
+        spock_lb.setBounds(350, 500, 500,150);
+        spock_lb.setVisible(false);
 
         //Buttons
-        button.setBounds(200, 400, 90, 50); //Sets the Bounds of the Button
-        button.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        button.setText("Rock"); //Label for Button
-        button.setFocusable(false); //allows Button to show above of Background
+        rock_btn.setBounds(200, 400, 90, 50); //Sets the Bounds of the Button
+        rock_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
+        rock_btn.setText("Rock"); //Label for Button
+        rock_btn.setFocusable(false); //allows Button to show above of Background
         
-        button2.setBounds(310, 400, 90, 50); //Sets the Bounds of the Button
-        button2.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        button2.setText("Paper"); //Label for Button
-        button2.setFocusable(false); //allows Button to show above of Background
+        paper_btn.setBounds(310, 400, 90, 50); //Sets the Bounds of the Button
+        paper_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
+        paper_btn.setText("Paper"); //Label for Button
+        paper_btn.setFocusable(false); //allows Button to show above of Background
         
-        button3.setBounds(420, 400, 90, 50); //Sets the Bounds of the Button
-        button3.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        button3.setText("Scissors"); //Label for Button
-        button3.setFocusable(false); //allows Button to show above of Background
+        scissors_btn.setBounds(420, 400, 90, 50); //Sets the Bounds of the Button
+        scissors_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
+        scissors_btn.setText("Scissors"); //Label for Button
+        scissors_btn.setFocusable(false); //allows Button to show above of Background
        
-        button4.setBounds(530, 400, 90, 50); //Sets the Bounds of the Button
-        button4.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        button4.setText("Lizard"); //Label for Button
-        button4.setFocusable(false); //allows Button to show above of Background
+        lizard_btn.setBounds(530, 400, 90, 50); //Sets the Bounds of the Button
+        lizard_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
+        lizard_btn.setText("Lizard"); //Label for Button
+        lizard_btn.setFocusable(false); //allows Button to show above of Background
         
-        button5.setBounds(640, 400, 90, 50); //Sets the Bounds of the Button
-        button5.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        button5.setText("Sprock"); //Label for Button
-        button5.setFocusable(false); //allows Button to show above of Background
+        spock_btn.setBounds(640, 400, 90, 50); //Sets the Bounds of the Button
+        spock_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
+        spock_btn.setText("Sprock"); //Label for Button
+        spock_btn.setFocusable(false); //allows Button to show above of Background
 
 
         //Allows the Code to stop when the JFrame is closed
@@ -96,76 +96,74 @@ public class GameFrame extends JFrame implements ActionListener{
         //Allows the JFrame to be Visible
         setVisible(true); 
 
+        //adding buttons to Frame
+        this.add(rock_btn);
+        this.add(paper_btn);
+        this.add(scissors_btn);
+        this.add(lizard_btn);
+        this.add(spock_btn);
 
-        this.add(button);
-        this.add(button2);
-        this.add(button3);
-        this.add(button4);
-        this.add(button5);
-        this.add(label);
-        this.add(label2);
-        this.add(label3);
-        this.add(label4);
-        this.add(label5);
+        //adding labels to Frame
+        this.add(rock_lb);
+        this.add(paper_lb);
+        this.add(scissors_lb);
+        this.add(lizard_lb);
+        this.add(spock_lb);
     }
 
     @Override
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == button){ //if button is pressed
+        if(e.getSource() == rock_btn){ //if button is pressed
             
             //disables all the buttons so users can not press it again.
-            button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            button5.setEnabled(false);
+            rock_btn.setEnabled(false);
+            paper_btn.setEnabled(false);
+            scissors_btn.setEnabled(false);
+            lizard_btn.setEnabled(false);
+            spock_btn.setEnabled(false);
             
-            label.setVisible(true);
-        }else if(e.getSource() == button2){ //if button is pressed
-            
-            //disables all the buttons so users can not press it again.
-            button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            button5.setEnabled(false);
-            
-            label2.setVisible(true);
-        }else if(e.getSource() == button3){ //if button is pressed
+            rock_lb.setVisible(true);
+        }else if(e.getSource() == paper_btn){ //if button is pressed
             
             //disables all the buttons so users can not press it again.
-            button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            button5.setEnabled(false);
+            rock_btn.setEnabled(false);
+            paper_btn.setEnabled(false);
+            scissors_btn.setEnabled(false);
+            lizard_btn.setEnabled(false);
+            spock_btn.setEnabled(false);
             
-            label3.setVisible(true);
-        }else if(e.getSource() == button4){ //if button is pressed
-            
-            //disables all the buttons so users can not press it again.
-            button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            button5.setEnabled(false);
-            
-            label4.setVisible(true);
-        }else if(e.getSource() == button5){ //if button is pressed
+            paper_lb.setVisible(true);
+        }else if(e.getSource() == scissors_btn){ //if button is pressed
             
             //disables all the buttons so users can not press it again.
-            button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            button5.setEnabled(false);
+            rock_btn.setEnabled(false);
+            paper_btn.setEnabled(false);
+            scissors_btn.setEnabled(false);
+            lizard_btn.setEnabled(false);
+            spock_btn.setEnabled(false);
             
-            label5.setVisible(true);
+            scissors_lb.setVisible(true);
+        }else if(e.getSource() == lizard_btn){ //if button is pressed
+            
+            //disables all the buttons so users can not press it again.
+            rock_btn.setEnabled(false);
+            paper_btn.setEnabled(false);
+            scissors_btn.setEnabled(false);
+            lizard_btn.setEnabled(false);
+            spock_btn.setEnabled(false);
+            
+            lizard_lb.setVisible(true);
+        }else if(e.getSource() == spock_btn){ //if button is pressed
+            
+            //disables all the buttons so users can not press it again.
+            rock_btn.setEnabled(false);
+            paper_btn.setEnabled(false);
+            scissors_btn.setEnabled(false);
+            lizard_btn.setEnabled(false);
+            spock_btn.setEnabled(false);
+            
+            spock_lb.setVisible(true);
         }
 
     }
-
-
-
-
 }
