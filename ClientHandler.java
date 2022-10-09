@@ -1,8 +1,16 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package rpsls;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import rpsls.Rpsls;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable
+{
     
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
@@ -10,7 +18,8 @@ public class ClientHandler implements Runnable {
     private BufferedWriter bufferedWriter;
     private String clientUsername;
     
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket)
+    {
         try{
             this.socket = socket;
             this.bufferedWriter= new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -24,17 +33,21 @@ public class ClientHandler implements Runnable {
     }
     
     @Override
-    public void run(){
+    public void run()
+    {
         String messageFromClient;
         
-        while(socket.isConnected()){
-            try{
+        while(socket.isConnected())
+        {
+            try
+            {
                 messageFromClient = bufferedReader.readLine();
                broadcastMessage(messageFromClient);
-        } catch (IOException e){
-            closeEverything(socket, bufferedReader, bufferedWriter);
-            break;
-        }
+            } catch (IOException e)
+            {
+                closeEverything(socket, bufferedReader, bufferedWriter);
+                break;
+            }
         }
     }
     
@@ -51,7 +64,8 @@ public class ClientHandler implements Runnable {
                 break;
             }
         }
-    }
+    } 
+    
     
     public void removeClientHandler(){
         clientHandlers.remove(this);
