@@ -60,12 +60,45 @@ public class client {
                         try{
                             msgFromClient = bufferedReader.readLine();
                             System.out.println(msgFromClient);
-                            
+                            RockPaperScissorsLizard_();
                         } catch (IOException e) {
                             closeEverything(socket, bufferedReader, bufferedWriter);
                         }
                     }
                 }
+
+                private void RockPaperScissorsLizard_() {
+                    Scanner scanner = new Scanner(System.in);
+                    
+                    while (true) {
+   
+                    String playerMove;
+                    String player2Move;
+                    String player3Move;
+
+                    while(true) {
+                        System.out.println("Please enter your move Player 1 (r, p, s, l, or k)");
+                        playerMove = scanner.nextLine();
+                        System.out.println("Please enter your move PLAYER 2 (r, p, s, l, or k)");
+                        player2Move = scanner.nextLine();
+                        System.out.println("Please enter your move PLAYER 3 (r, p, s, l, or k)");
+                        player3Move = scanner.nextLine();
+
+                        if (playerMove.equals("r") || playerMove.equals("p") || playerMove.equals("s") || playerMove.equals("l") || playerMove.equals("k")) {
+                             break;
+                         }
+                          System.out.println(playerMove + " is not a valid move.");
+                        }
+
+                        System.out.println("Player 2 played: " + player2Move);
+
+                        System.out.println("Player 3 played: " + player3Move);
+
+                        if (playerMove.equals(player2Move) && playerMove.equals(player3Move)) {
+                          System.out.println("The game was a tie!");
+                        }
+                      }
+                     }
             }).start(); 
 }
         public void closeEverything (Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
