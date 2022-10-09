@@ -13,24 +13,7 @@ import java.util.Scanner;
 
 public class Rpsls {
 
-    static String number_to_name(int n) {
-        
-        switch(n) {
-            case 0:
-                return "rock";
-            case 1:
-                return "Spock";
-            case 2:
-                return "paper";
-            case 3:
-                return "lizard";
-            case 4:
-                return "scissors";
-            default:
-                return "Not defined";
-        }
-    }
-    
+       
     static int name_to_number(String name) {
         
         switch(name) {
