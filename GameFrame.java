@@ -1,14 +1,8 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-
-
 
 public class GameFrame extends JFrame implements ActionListener{
     JButton rock_btn = new JButton();
@@ -34,12 +28,12 @@ public class GameFrame extends JFrame implements ActionListener{
 
     public GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 
-        File file = new File("Audio\\background.wav");
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+        File audio_file = new File("Audio\\background.wav");
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio_file);
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
 
-        //Labels
+        //Setting Parameters for Labels
         rock_lb.setText("You have chosen Rock!");
         rock_lb.setIcon(rock_img);
         rock_lb.setHorizontalTextPosition(JLabel.LEFT);
@@ -70,34 +64,34 @@ public class GameFrame extends JFrame implements ActionListener{
         spock_lb.setBounds(350, 500, 500,150);
         spock_lb.setVisible(false);
 
-        //Buttons
-        rock_btn.setBounds(200, 400, 90, 50); //Sets the Bounds of the Button
-        rock_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        rock_btn.setText("Rock"); //Label for Button
-        rock_btn.setFocusable(false); //allows Button to show above of Background
+        //Setting Parameetrs for Buttons
+        rock_btn.setBounds(200, 400, 90, 50); 
+        rock_btn.addActionListener(this); 
+        rock_btn.setText("Rock"); 
+        rock_btn.setFocusable(false); 
         
-        paper_btn.setBounds(310, 400, 90, 50); //Sets the Bounds of the Button
-        paper_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        paper_btn.setText("Paper"); //Label for Button
-        paper_btn.setFocusable(false); //allows Button to show above of Background
+        paper_btn.setBounds(310, 400, 90, 50); 
+        paper_btn.addActionListener(this); 
+        paper_btn.setText("Paper"); 
+        paper_btn.setFocusable(false); 
         
-        scissors_btn.setBounds(420, 400, 90, 50); //Sets the Bounds of the Button
-        scissors_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        scissors_btn.setText("Scissors"); //Label for Button
-        scissors_btn.setFocusable(false); //allows Button to show above of Background
+        scissors_btn.setBounds(420, 400, 90, 50); 
+        scissors_btn.addActionListener(this); 
+        scissors_btn.setText("Scissors"); 
+        scissors_btn.setFocusable(false); 
        
-        lizard_btn.setBounds(530, 400, 90, 50); //Sets the Bounds of the Button
-        lizard_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        lizard_btn.setText("Lizard"); //Label for Button
-        lizard_btn.setFocusable(false); //allows Button to show above of Background
+        lizard_btn.setBounds(530, 400, 90, 50); 
+        lizard_btn.addActionListener(this); 
+        lizard_btn.setText("Lizard"); 
+        lizard_btn.setFocusable(false); 
         
-        spock_btn.setBounds(640, 400, 90, 50); //Sets the Bounds of the Button
-        spock_btn.addActionListener(this); //Allows Button to be clicked using ActionListener interface
-        spock_btn.setText("Sprock"); //Label for Button
-        spock_btn.setFocusable(false); //allows Button to show above of Background
+        spock_btn.setBounds(640, 400, 90, 50); 
+        spock_btn.addActionListener(this); 
+        spock_btn.setText("Sprock"); 
+        spock_btn.setFocusable(false); 
 
 
-        //Allows the Code to stop when the JFrame is closed
+        //Setting Parameters for the JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         this.setLayout(null);
@@ -123,6 +117,7 @@ public class GameFrame extends JFrame implements ActionListener{
         this.add(lizard_lb);
         this.add(spock_lb);
 
+        //Starting Background Audio once JFrame is opened
         clip.start();
     }
 
@@ -130,55 +125,38 @@ public class GameFrame extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == rock_btn){ //if button is pressed
             
-            //disables all the buttons so users can not press it again.
-            rock_btn.setEnabled(false);
-            paper_btn.setEnabled(false);
-            scissors_btn.setEnabled(false);
-            lizard_btn.setEnabled(false);
-            spock_btn.setEnabled(false);
+            buttonsOff();//calls buttonsOff method
+            rock_lb.setVisible(true); //shows label in Jframe
+
+        }else if(e.getSource() == paper_btn){ 
             
-            rock_lb.setVisible(true);
-        }else if(e.getSource() == paper_btn){ //if button is pressed
+            buttonsOff();//calls buttonsOff method
+            paper_lb.setVisible(true);//shows label in Jframe
+
+        }else if(e.getSource() == scissors_btn){ 
             
-            //disables all the buttons so users can not press it again.
-            rock_btn.setEnabled(false);
-            paper_btn.setEnabled(false);
-            scissors_btn.setEnabled(false);
-            lizard_btn.setEnabled(false);
-            spock_btn.setEnabled(false);
+            buttonsOff();
+            scissors_lb.setVisible(true);//shows label in Jframe
+
+        }else if(e.getSource() == lizard_btn){ 
             
-            paper_lb.setVisible(true);
-        }else if(e.getSource() == scissors_btn){ //if button is pressed
+            buttonsOff();//calls buttonsOff method
+            lizard_lb.setVisible(true);//shows label in Jframe
+
+        }else if(e.getSource() == spock_btn){ 
             
-            //disables all the buttons so users can not press it again.
-            rock_btn.setEnabled(false);
-            paper_btn.setEnabled(false);
-            scissors_btn.setEnabled(false);
-            lizard_btn.setEnabled(false);
-            spock_btn.setEnabled(false);
-            
-            scissors_lb.setVisible(true);
-        }else if(e.getSource() == lizard_btn){ //if button is pressed
-            
-            //disables all the buttons so users can not press it again.
-            rock_btn.setEnabled(false);
-            paper_btn.setEnabled(false);
-            scissors_btn.setEnabled(false);
-            lizard_btn.setEnabled(false);
-            spock_btn.setEnabled(false);
-            
-            lizard_lb.setVisible(true);
-        }else if(e.getSource() == spock_btn){ //if button is pressed
-            
-            //disables all the buttons so users can not press it again.
-            rock_btn.setEnabled(false);
-            paper_btn.setEnabled(false);
-            scissors_btn.setEnabled(false);
-            lizard_btn.setEnabled(false);
-            spock_btn.setEnabled(false);
-            
-            spock_lb.setVisible(true);
+            buttonsOff();//calls buttonsOff method
+            spock_lb.setVisible(true);//shows label in Jframe
         }
 
+    }
+
+    //Method to Disable all Buttons
+    public void buttonsOff(){
+        rock_btn.setEnabled(false);
+        paper_btn.setEnabled(false);
+        scissors_btn.setEnabled(false);
+        lizard_btn.setEnabled(false);
+        spock_btn.setEnabled(false);
     }
 }
