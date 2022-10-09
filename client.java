@@ -9,6 +9,9 @@ public class client {
 	private BufferedReader bufferedReader;
         private BufferedWriter bufferedWriter;
         private String username;
+        private int playerID;
+        
+        
         
         public client (Socket socket, String username){
             try
@@ -28,6 +31,7 @@ public class client {
         {
             try
             {
+
                 bufferedWriter.write(username);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
@@ -62,6 +66,7 @@ public class client {
                         {
                             msgFromClient = bufferedReader.readLine();
                             System.out.println(msgFromClient);
+                            server.Game();
                             if (username.equals("Quit Game"))
                             {
                                 socket.close();
@@ -72,6 +77,10 @@ public class client {
                         {
                             closeEverything(socket, bufferedReader, bufferedWriter);
                         }
+//                        if (playerID == 1) 
+//                        {
+//                            player1Button = DataInput.readInt();
+//                        }
                     }
                 }
 
