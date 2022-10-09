@@ -21,19 +21,24 @@ public class GameFrame extends JFrame implements ActionListener{
     JLabel lizard_lb = new JLabel();
     ImageIcon spock_img = new ImageIcon("Imgs\\spock.png");
     JLabel spock_lb = new JLabel();
+
+    JLabel title_lb = new JLabel();
+    JLabel rules_lb = new JLabel();
+    JLabel waiting_lb = new JLabel();
    
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
         new GameFrame();
     }
 
     public GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-
+        
+        //Setting Background Audio 
         File audio_file = new File("Audio\\background.wav");
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio_file);
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
 
-        //Setting Parameters for Labels
+        //Setting Bounds for Labels
         rock_lb.setText("You have chosen Rock!");
         rock_lb.setIcon(rock_img);
         rock_lb.setHorizontalTextPosition(JLabel.LEFT);
@@ -64,7 +69,19 @@ public class GameFrame extends JFrame implements ActionListener{
         spock_lb.setBounds(350, 500, 500,150);
         spock_lb.setVisible(false);
 
-        //Setting Parameetrs for Buttons
+        title_lb.setText("Welcome to Rock Paper Scissors Lizard Spock!");
+        title_lb.setBounds(350, 0, 500,50);
+        title_lb.setVisible(true);
+
+        rules_lb.setText("<html>Rules:<br>Scissors cuts Paper<br>Paper covers Rock<br>Rock crushes Lizard<br>Lizard poisons Spock<br>Spock smashes Scissors<br>Scissors decapitates Lizard<br>Lizard eats Paper<br>Paper disproves Spock<br>Spock vaporizes Rock<br>Rock crushes Scissors<html>");
+        rules_lb.setBounds(10, 0, 200,400);
+        rules_lb.setVisible(true);
+
+        waiting_lb.setText(".....Waiting for Other Players......");
+        waiting_lb.setBounds(380, 200, 500,50);
+        waiting_lb.setVisible(false);
+
+        //Setting Bounds for Buttons
         rock_btn.setBounds(200, 400, 90, 50); 
         rock_btn.addActionListener(this); 
         rock_btn.setText("Rock"); 
@@ -90,8 +107,7 @@ public class GameFrame extends JFrame implements ActionListener{
         spock_btn.setText("Sprock"); 
         spock_btn.setFocusable(false); 
 
-
-        //Setting Parameters for the JFrame
+        //Setting Bounds for the JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         this.setLayout(null);
@@ -116,6 +132,9 @@ public class GameFrame extends JFrame implements ActionListener{
         this.add(scissors_lb);
         this.add(lizard_lb);
         this.add(spock_lb);
+        this.add(title_lb);
+        this.add(rules_lb);
+        this.add(waiting_lb);
 
         //Starting Background Audio once JFrame is opened
         clip.start();
@@ -123,32 +142,36 @@ public class GameFrame extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == rock_btn){ //if button is pressed
+        if(e.getSource() == rock_btn){ //if button is pressed by user
             
             buttonsOff();//calls buttonsOff method
             rock_lb.setVisible(true); //shows label in Jframe
+            waiting_lb.setVisible(true);
 
         }else if(e.getSource() == paper_btn){ 
             
             buttonsOff();//calls buttonsOff method
             paper_lb.setVisible(true);//shows label in Jframe
+            waiting_lb.setVisible(true);
 
         }else if(e.getSource() == scissors_btn){ 
             
             buttonsOff();
             scissors_lb.setVisible(true);//shows label in Jframe
+            waiting_lb.setVisible(true);
 
         }else if(e.getSource() == lizard_btn){ 
             
             buttonsOff();//calls buttonsOff method
             lizard_lb.setVisible(true);//shows label in Jframe
+            waiting_lb.setVisible(true);
 
         }else if(e.getSource() == spock_btn){ 
             
             buttonsOff();//calls buttonsOff method
             spock_lb.setVisible(true);//shows label in Jframe
+            waiting_lb.setVisible(true);
         }
-
     }
 
     //Method to Disable all Buttons
