@@ -82,34 +82,40 @@ public class server{
                 dos.writeInt(playerID);
                 dos.flush();
 
+                while(true){
                 if(playerID == 1){
                     playerOneChoice = dis.readInt();
                     System.out.println("Player One has chosen: " + playerOneChoice);
-                }else if(playerID == 2){
+                }
+                if(playerID == 2){
                     playerTwoChoice = dis.readInt();
                     System.out.println( "Player Two has chosen: " + playerTwoChoice);
-                }else if(playerID == 3){
+                }
+                if(playerID == 3){
                     playerThreeChoice = dis.readInt();
                     System.out.println("Player Three has chosen: " + playerThreeChoice);
                 }
                 
-                if(playerOneChoice != 0 && playerTwoChoice != 0 && playerThreeChoice != 0)
-                    checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
+                tie = false;
+                checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
                     
                 if(tie == true){
                     System.out.println(tie);
-                    do_again = true;
                     synchronized(doss){
                         for(DataOutputStream dos : doss){
                             dos.writeInt(-1);
                         }
                     }
-                }
 
+                    playerOneChoice = 0;
+                    playerTwoChoice = 0;
+                    playerThreeChoice = 0;
+                }
+                }
             }catch(IOException e){}
         }
 
-         //method to check Win condition of RPSLS and sets boolean values accordingly
+        //method to check Win condition of RPSLS and sets boolean values accordingly
     public void checkWin(int playerOneChoice, int playerTwoChoice, int playerThreeChoice){
         if(playerOneChoice == 1){
             if(playerTwoChoice == 1){
@@ -711,6 +717,6 @@ public class server{
             }
         }
     }
-   
+    
     }
 }

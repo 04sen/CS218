@@ -271,7 +271,9 @@ public class GameFrame extends JFrame{
     }
 
     public void showResult(){
-        csc.getResult();
+        while(true){
+            csc.getResult();
+        }
     }
 
 
