@@ -1,14 +1,20 @@
 import java.io.*;
 import java.net.*;
-
+import java.util.*;
 public class server{
     private ServerSocket ss;
     private int numPlayers;
-    private int result;
-    public static int playerOneChoice;
-    public static int playerTwoChoice;
-    public static int playerThreeChoice;
-    
+    public static int playerOneChoice = 0;
+    public static int playerTwoChoice = 0;
+    public static int playerThreeChoice = 0;
+    public static int result;
+    private boolean playerOneWin;
+    private boolean playerTwoWin;
+    private boolean playerThreeWin;
+    private boolean tie;
+    private boolean do_again = false;
+    List<DataOutputStream> doss = new ArrayList<>();
+
     private ServerSideConnections player1;
     private ServerSideConnections player2;
     private ServerSideConnections player3;
@@ -31,6 +37,9 @@ public class server{
         try{
             while(numPlayers < 3){
                 Socket s = ss.accept();
+                synchronized(doss){
+                    doss.add(new DataOutputStream(s.getOutputStream()));
+                }
                 numPlayers++;
                 System.out.println("Player #: " + numPlayers + " has connectioned.");
                 ServerSideConnections ssc = new ServerSideConnections(s, numPlayers);
@@ -51,7 +60,6 @@ public class server{
             }
         }catch(IOException e){}
     }
-
     private class ServerSideConnections implements Runnable{
         private Socket socket;
         private DataInputStream dis;
@@ -84,100 +92,140 @@ public class server{
                     playerThreeChoice = dis.readInt();
                     System.out.println("Player Three has chosen: " + playerThreeChoice);
                 }
-
-                if(playerOneChoice != 0 && playerTwoChoice != 0 && playerThreeChoice != 0){
+                
+                if(playerOneChoice != 0 && playerTwoChoice != 0 && playerThreeChoice != 0)
                     checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
+                    
+                if(tie == true){
+                    System.out.println(tie);
+                    do_again = true;
+                    synchronized(doss){
+                        for(DataOutputStream dos : doss){
+                            dos.writeInt(-1);
+                        }
+                    }
                 }
+
             }catch(IOException e){}
         }
-    }
 
-    //method to check Win condition of RPSLS.
+         //method to check Win condition of RPSLS and sets boolean values accordingly
     public void checkWin(int playerOneChoice, int playerTwoChoice, int playerThreeChoice){
         if(playerOneChoice == 1){
             if(playerTwoChoice == 1){
                 if(playerThreeChoice == 1){
                     System.out.println("It is a tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 & 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 & 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
                 }
 
             }else if(playerTwoChoice == 2){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 2 & 3 Win");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("It is a tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("It is a tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
                 }
 
             }else if(playerTwoChoice == 3){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 1 & 3 Wins");
+                    playerThreeWin = true;
+                    playerOneWin = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("It is a tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("It is a tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
                 }
 
             }else if(playerTwoChoice == 4){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 1 & 3 Wins");
+                    playerThreeWin = true;
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 2){
                     System.out.println("It is a tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a tie");
+                    tie = true;
                 }
 
             }else if(playerTwoChoice == 5){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2 & 3 Wins");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
                 }
 
             }
@@ -186,298 +234,483 @@ public class server{
             if(playerTwoChoice == 1){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 1 & 3 Wins");
+                    playerThreeWin = true;
+                    playerOneWin = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
                 }
 
             }else if(playerTwoChoice == 2){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 1 & 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("Its a Tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 3 wins");
+                    playerThreeWin = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 & 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
                 }
 
             }else if(playerTwoChoice == 3){
                 if(playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
 
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 2 & 3 Wins");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
 
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
 
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }
 
             }else if(playerTwoChoice == 4){
                 if(playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 2 & 3 Wins");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
                 }
 
             }else if(playerTwoChoice == 5){
                 if(playerThreeChoice == 1){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 2){
                     System.out.println("Player 1 & 3 Wins");
+                    playerThreeWin = true;
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
                 }
             }
         } else if (playerOneChoice == 3){
             if (playerTwoChoice == 1) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 2 & Player 3 Win");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 2 wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
                 }
             } else if (playerTwoChoice == 2) {
                 if (playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 & Player 3 Win");
+                    playerThreeWin = true;
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 } 
             } else if (playerTwoChoice == 3) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 & Player 2 Win");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 & Player 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 } 
             } else if (playerTwoChoice == 3) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 & Player 2 Win");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 & Player 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
                 } 
+
             } else if (playerTwoChoice == 4) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 Win");
+                    playerOneWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 & Player 2 Win");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 } 
+
             } else if (playerTwoChoice == 5) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2 & Player 3 Win");
+                    playerThreeWin = true;
                 } 
             }
         } else if (playerOneChoice == 4){
             if (playerTwoChoice == 1) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 2 & Player 3 Win");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 }
             } else if (playerTwoChoice == 2) {
                 if (playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 & Player 3 Win");
+                    playerOneWin = true;
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
                 } 
             } else if (playerTwoChoice == 3) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 & Player 3 Win");
+                    playerOneWin = true;
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 } 
             } else if (playerTwoChoice == 4) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 & Player 2 Win");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 & Player 2 Win");
+                    playerOneWin = true;
+                    playerTwoWin = true;
                 } 
             } else if (playerTwoChoice == 5) {
                 if (playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 1 & Player 3 Win");
+                    playerOneWin = true;
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
                 } 
             }
         } else if (playerOneChoice == 5){
             if (playerTwoChoice == 1) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 & Player 3");
+                    playerOneWin = true;
+                    playerThreeWin = true;
                 }
+
             } else if (playerTwoChoice == 2) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 2 & Player 3 Win");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
     
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
     
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2 Wins");
+                    playerTwoWin = true;
                 } 
             } else if (playerTwoChoice == 3) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 Wins");
+                    playerOneWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 1 & Player 3 Win");
+                    playerOneWin = true;
+                    playerThreeWin = true;
                 }
+
             } else if (playerTwoChoice == 4) {
                 if (playerThreeChoice == 1){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if (playerThreeChoice == 2){
                     System.out.println("Player 2");
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Its a Tie");
+                    tie = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 2 & Player 3");
+                    playerTwoWin = true;
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Player 2");
+                    playerTwoWin = true;
                 } 
+
             } else if (playerTwoChoice == 5) {
                 if (playerThreeChoice == 1){
                     System.out.println("Player 1 & Player 2");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if (playerThreeChoice == 2){
-                    System.out.println("Player 3");
+                    System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 3){
                     System.out.println("Player 1 & Player 2 Wins");
+                    playerOneWin = true;
+                    playerTwoWin = true;
+
                 }else if(playerThreeChoice == 4){
                     System.out.println("Player 3 Wins");
+                    playerThreeWin = true;
+
                 }else if(playerThreeChoice == 5){
                     System.out.println("Its a Tie");
+                    tie = true;
                 } 
             }
         }
-   }
+    }
+   
+    }
 }
