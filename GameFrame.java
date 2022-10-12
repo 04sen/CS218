@@ -28,9 +28,10 @@ public class GameFrame extends JFrame{
     JLabel lost_lb = new JLabel();
     JLabel win_lb = new JLabel();
     JLabel tie_lb = new JLabel();
-
+  
     int playerID;
     int playerChoice;
+    static int result1;
 
     private ClientSideConnection csc;
    
@@ -39,6 +40,7 @@ public class GameFrame extends JFrame{
         p.connectionToServer();
         p.setUpGUI();
         p.setUpButtons();
+        p.showResult(); 
     }
 
     public GameFrame(){
@@ -170,6 +172,7 @@ public class GameFrame extends JFrame{
                 if(e.getSource() == rock_btn){ //if button is pressed by user
             
                     buttonsOff();//calls buttonsOff method
+                    tie_lb.setVisible(false);
                     rock_lb.setVisible(true); //shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 1;
@@ -178,6 +181,7 @@ public class GameFrame extends JFrame{
                 }else if(e.getSource() == paper_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    tie_lb.setVisible(false);
                     paper_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 2;
@@ -186,6 +190,7 @@ public class GameFrame extends JFrame{
                 }else if(e.getSource() == scissors_btn){ 
                     
                     buttonsOff();
+                    tie_lb.setVisible(false);
                     scissors_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 3;
@@ -194,6 +199,7 @@ public class GameFrame extends JFrame{
                 }else if(e.getSource() == lizard_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    tie_lb.setVisible(false);
                     lizard_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 4;
@@ -202,6 +208,7 @@ public class GameFrame extends JFrame{
                 }else if(e.getSource() == spock_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    tie_lb.setVisible(false);
                     spock_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 5;
@@ -221,12 +228,11 @@ public class GameFrame extends JFrame{
         csc = new ClientSideConnection();
     }
 
-    public class ClientSideConnection{
-        
+    public class ClientSideConnection{ 
         private DataInputStream dis;
         private DataOutputStream dos;
         private Socket socket;
-        
+
         public ClientSideConnection(){
 
             System.out.println("----Client---");
@@ -236,6 +242,7 @@ public class GameFrame extends JFrame{
                 dos = new DataOutputStream(socket.getOutputStream());
 
                 playerID = dis.readInt();
+                
             
             } catch (IOException e) {}
         }
@@ -246,7 +253,27 @@ public class GameFrame extends JFrame{
                 dos.flush();
             }catch(IOException e){}
         }
+
+        public void getResult(){
+            try { 
+                result1 = dis.readInt();
+
+                if(result1 == -1){
+                    waiting_lb.setVisible(false);
+                    tie_lb.setVisible(true);
+                    buttionsOn();
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error in getResult()");
+            }
+        }
     }
+
+    public void showResult(){
+        csc.getResult();
+    }
+
 
     //Method to Disable all Buttons
     public void buttonsOff(){
@@ -272,5 +299,8 @@ public class GameFrame extends JFrame{
         scissors_lb.setVisible(false);
         lizard_lb.setVisible(false);
         spock_lb.setVisible(false);
+        waiting_lb.setVisible(false);
+        win_lb.setVisible(false);
+        lost_lb.setVisible(false);
     }
 }
