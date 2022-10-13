@@ -36,9 +36,6 @@ public class server{
         try{
             while(numPlayers < 3){
                 Socket socket = ss.accept();
-                synchronized(doss){
-                    doss.add(new DataOutputStream(socket.getOutputStream()));
-                }
                 numPlayers++;
                 System.out.println("Player #: " + numPlayers + " has connectioned.");
                 ServerSideConnections ssc = new ServerSideConnections(socket, numPlayers);
@@ -99,12 +96,9 @@ public class server{
                     checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
                         
                     if(tie == true){
-                        synchronized(doss){
-                            for(DataOutputStream dos : doss){
-                                dos.writeInt(-1);
-                                dos.flush();
-                            }
-                        }
+                        player1.dos.writeInt(-1);
+                        player2.dos.writeInt(-1);
+                        player3.dos.writeInt(-1);
 
                         playerOneChoice = 0;
                         playerTwoChoice = 0;
