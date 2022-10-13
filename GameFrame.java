@@ -262,6 +262,16 @@ public class GameFrame extends JFrame{
                     waiting_lb.setVisible(false);
                     tie_lb.setVisible(true);
                     buttionsOn();
+
+                }else if(result1 == 1){
+                    System.out.println(result1);
+                    waiting_lb.setVisible(false);
+                    win_lb.setVisible(true);
+
+                }else if(result1 == 0){
+                    System.out.println(result1);
+                    waiting_lb.setVisible(false);
+                    lost_lb.setVisible(true);
                 }
 
             } catch (IOException e) {
