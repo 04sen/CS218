@@ -12,7 +12,6 @@ public class server{
     private boolean playerTwoWin;
     private boolean playerThreeWin;
     private boolean tie;
-    private boolean do_again = false;
     List<DataOutputStream> doss = new ArrayList<>();
 
     private ServerSideConnections player1;
@@ -36,13 +35,13 @@ public class server{
     public void acceptConnections(){
         try{
             while(numPlayers < 3){
-                Socket s = ss.accept();
+                Socket socket = ss.accept();
                 synchronized(doss){
-                    doss.add(new DataOutputStream(s.getOutputStream()));
+                    doss.add(new DataOutputStream(socket.getOutputStream()));
                 }
                 numPlayers++;
                 System.out.println("Player #: " + numPlayers + " has connectioned.");
-                ServerSideConnections ssc = new ServerSideConnections(s, numPlayers);
+                ServerSideConnections ssc = new ServerSideConnections(socket, numPlayers);
                 if (numPlayers == 1)
                 {
                     player1 = ssc;
@@ -50,7 +49,7 @@ public class server{
                 else if (numPlayers == 2)
                 {
                     player2 = ssc;
-
+                    
                 } else if (numPlayers == 3){
                     player3 = ssc;
                 }
@@ -83,35 +82,61 @@ public class server{
                 dos.flush();
 
                 while(true){
-                if(playerID == 1){
-                    playerOneChoice = dis.readInt();
-                    System.out.println("Player One has chosen: " + playerOneChoice);
-                }
-                if(playerID == 2){
-                    playerTwoChoice = dis.readInt();
-                    System.out.println( "Player Two has chosen: " + playerTwoChoice);
-                }
-                if(playerID == 3){
-                    playerThreeChoice = dis.readInt();
-                    System.out.println("Player Three has chosen: " + playerThreeChoice);
+                    if(playerID == 1){
+                        playerOneChoice = dis.readInt();
+                        System.out.println("Player One has chosen: " + playerOneChoice);
+                    }
+                    if(playerID == 2){
+                        playerTwoChoice = dis.readInt();
+                        System.out.println( "Player Two has chosen: " + playerTwoChoice);
+                    }
+                    if(playerID == 3){
+                        playerThreeChoice = dis.readInt();
+                        System.out.println("Player Three has chosen: " + playerThreeChoice);
+                    }
+                    
+                    tie = false;
+                    checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
+                        
+                    if(tie == true){
+                        synchronized(doss){
+                            for(DataOutputStream dos : doss){
+                                dos.writeInt(-1);
+                                dos.flush();
+                            }
+                        }
+
+                        playerOneChoice = 0;
+                        playerTwoChoice = 0;
+                        playerThreeChoice = 0;
+                        
+                    }else if(playerOneWin == true && playerTwoWin == true){
+                        player1.dos.writeInt(1);
+                        player2.dos.writeInt(1);
+                        player3.dos.writeInt(0);
+                    }else if(playerTwoWin == true && playerThreeWin == true){
+                        player1.dos.writeInt(0);
+                        player2.dos.writeInt(1);
+                        player3.dos.writeInt(1);
+
+                    }else if(playerOneWin == true){
+                        player1.dos.writeInt(1);
+                        player2.dos.writeInt(0);
+                        player3.dos.writeInt(0);
+
+                    }else if(playerTwoWin == true){
+                        player1.dos.writeInt(0);
+                        player2.dos.writeInt(1);
+                        player3.dos.writeInt(0);
+
+                    }else if(playerThreeWin == true){
+                        player1.dos.writeInt(0);
+                        player2.dos.writeInt(0);
+                        player3.dos.writeInt(1);
+                    }
                 }
                 
-                tie = false;
-                checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
-                    
-                if(tie == true){
-                    System.out.println(tie);
-                    synchronized(doss){
-                        for(DataOutputStream dos : doss){
-                            dos.writeInt(-1);
-                        }
-                    }
-
-                    playerOneChoice = 0;
-                    playerTwoChoice = 0;
-                    playerThreeChoice = 0;
-                }
-                }
+            
             }catch(IOException e){}
         }
 
