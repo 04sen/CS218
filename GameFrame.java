@@ -10,6 +10,11 @@ public class GameFrame extends JFrame{
     JButton scissors_btn = new JButton();
     JButton lizard_btn = new JButton();
     JButton spock_btn = new JButton();
+    JButton playMusic_btn = new JButton();
+    JButton stopMusic_btn = new JButton();
+
+    ImageIcon sound_img = new ImageIcon("Imgs\\sound.png");
+    ImageIcon mute_img = new ImageIcon("Imgs\\mute.png");
 
     ImageIcon rock_img = new ImageIcon("Imgs\\Rock.png");
     JLabel rock_lb = new JLabel();
@@ -28,6 +33,10 @@ public class GameFrame extends JFrame{
     JLabel lost_lb = new JLabel();
     JLabel win_lb = new JLabel();
     JLabel tie_lb = new JLabel();
+
+    File audio_file;
+    AudioInputStream audioStream;
+    Clip clip;
   
     int playerID;
     int playerChoice;
@@ -46,11 +55,11 @@ public class GameFrame extends JFrame{
     public GameFrame(){
     }
 
-    public void setUpGUI()  throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+    public void setUpGUI() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
          //Setting Background Audio 
-         File audio_file = new File("Audio\\background.wav");
-         AudioInputStream audioStream = AudioSystem.getAudioInputStream(audio_file);
-         Clip clip = AudioSystem.getClip();
+         audio_file = new File("Audio\\background.wav");
+         audioStream = AudioSystem.getAudioInputStream(audio_file);
+         clip = AudioSystem.getClip();
          clip.open(audioStream);
  
          //Setting Bounds for Labels
@@ -127,8 +136,17 @@ public class GameFrame extends JFrame{
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(640, 400, 90, 50); 
-         spock_btn.setText("Sprock"); 
+         spock_btn.setText("Spock"); 
          spock_btn.setFocusable(false); 
+
+         stopMusic_btn.setBounds(850,10,50,50);
+         stopMusic_btn.setIcon(sound_img);
+         stopMusic_btn.setFocusable(false);
+
+         playMusic_btn.setBounds(850,10,50,50);
+         playMusic_btn.setIcon(mute_img);
+         playMusic_btn.setVisible(false);
+         playMusic_btn.setFocusable(false);
  
          //Setting Bounds for the JFrame
          setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,6 +166,8 @@ public class GameFrame extends JFrame{
          this.add(scissors_btn);
          this.add(lizard_btn);
          this.add(spock_btn);
+         this.add(stopMusic_btn);
+         this.add(playMusic_btn);
  
          //adding labels to Frame
          this.add(rock_lb);
@@ -165,7 +185,6 @@ public class GameFrame extends JFrame{
          //Starting Background Audio once JFrame is opened
          clip.start();
     }
-
     public void setUpButtons(){
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -213,6 +232,15 @@ public class GameFrame extends JFrame{
                     waiting_lb.setVisible(true);
                     playerChoice = 5;
                     csc.sendChoice(playerChoice);
+
+                }else if(e.getSource() == stopMusic_btn){
+                    clip.stop();
+                    stopMusic_btn.setVisible(false);
+                    playMusic_btn.setVisible(true);
+                }else if(e.getSource() == playMusic_btn){
+                    clip.start();
+                    playMusic_btn.setVisible(false);
+                    stopMusic_btn.setVisible(true);
                 }
             }
         };
@@ -222,6 +250,8 @@ public class GameFrame extends JFrame{
         scissors_btn.addActionListener(al);
         lizard_btn.addActionListener(al);
         spock_btn.addActionListener(al);
+        stopMusic_btn.addActionListener(al);
+        playMusic_btn.addActionListener(al);
     }
 
     public void connectionToServer(){
