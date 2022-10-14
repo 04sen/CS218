@@ -135,22 +135,32 @@ public class GameFrame extends JFrame{
          //Setting Bounds for Buttons
          rock_btn.setBounds(200, 400, 90, 50); 
          rock_btn.setText("Rock"); 
+         rock_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         rock_btn.setBackground(Color.decode("#dca9fc"));
          rock_btn.setFocusable(false); 
          
          paper_btn.setBounds(310, 400, 90, 50); 
          paper_btn.setText("Paper"); 
+         paper_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         paper_btn.setBackground(Color.decode("#dca9fc"));
          paper_btn.setFocusable(false); 
          
          scissors_btn.setBounds(420, 400, 90, 50); 
          scissors_btn.setText("Scissors"); 
+         scissors_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         scissors_btn.setBackground(Color.decode("#dca9fc"));
          scissors_btn.setFocusable(false); 
         
          lizard_btn.setBounds(530, 400, 90, 50); 
          lizard_btn.setText("Lizard"); 
+         lizard_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         lizard_btn.setBackground(Color.decode("#dca9fc"));
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(640, 400, 90, 50); 
          spock_btn.setText("Spock"); 
+         spock_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         spock_btn.setBackground(Color.decode("#dca9fc"));
          spock_btn.setFocusable(false); 
 
          stopMusic_btn.setBounds(850,10,50,50);
