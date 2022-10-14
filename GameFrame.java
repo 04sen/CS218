@@ -1,10 +1,15 @@
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
 public class GameFrame extends JFrame{
+    final int FRAME_WIDTH = 1000;
+    final int FRAME_HEIGHT = 700;
+
+
     JButton rock_btn = new JButton();
     JButton paper_btn = new JButton();
     JButton scissors_btn = new JButton();
@@ -15,16 +20,17 @@ public class GameFrame extends JFrame{
 
     ImageIcon sound_img = new ImageIcon("Imgs\\sound.png");
     ImageIcon mute_img = new ImageIcon("Imgs\\mute.png");
-
     ImageIcon rock_img = new ImageIcon("Imgs\\Rock.png");
-    JLabel rock_lb = new JLabel();
     ImageIcon paper_img = new ImageIcon("Imgs\\paper.png");
-    JLabel paper_lb = new JLabel();
     ImageIcon scissors_img = new ImageIcon("Imgs\\scissors.png");
-    JLabel scissors_lb = new JLabel();
     ImageIcon lizard_img = new ImageIcon("Imgs\\lizard.png");
-    JLabel lizard_lb = new JLabel();
     ImageIcon spock_img = new ImageIcon("Imgs\\spock.png");
+    Image star_img = new ImageIcon("Imgs\\star.png").getImage();
+
+    JLabel rock_lb = new JLabel();
+    JLabel paper_lb = new JLabel();
+    JLabel scissors_lb = new JLabel();
+    JLabel lizard_lb = new JLabel();
     JLabel spock_lb = new JLabel();
 
     JLabel title_lb = new JLabel();
@@ -34,6 +40,7 @@ public class GameFrame extends JFrame{
     JLabel win_lb = new JLabel();
     JLabel tie_lb = new JLabel();
 
+
     File audio_file;
     AudioInputStream audioStream;
     Clip clip;
@@ -41,6 +48,12 @@ public class GameFrame extends JFrame{
     int playerID;
     int playerChoice;
     static int result1;
+    int star_x = 0;
+    int star_y = 0;
+    int star_xVelocity = 20;
+    int star_yVelocity = 20;
+
+    Timer timer;
 
     private ClientSideConnection csc;
    
@@ -147,12 +160,14 @@ public class GameFrame extends JFrame{
          playMusic_btn.setIcon(mute_img);
          playMusic_btn.setVisible(false);
          playMusic_btn.setFocusable(false);
+
+         timer = new Timer(100, null);
  
          //Setting Bounds for the JFrame
          setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          setResizable(false);
          this.setLayout(null);
-         setSize(1000,700);
+         this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
          
          //Allows the JFrame to appear in the  middle of the screeen
          setLocationRelativeTo(null);
@@ -185,6 +200,7 @@ public class GameFrame extends JFrame{
          //Starting Background Audio once JFrame is opened
          clip.start();
     }
+
     public void setUpButtons(){
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -242,6 +258,19 @@ public class GameFrame extends JFrame{
                     playMusic_btn.setVisible(false);
                     stopMusic_btn.setVisible(true);
                 }
+                
+                if(star_x>=FRAME_WIDTH-star_img.getWidth(null)){
+                    star_x = star_x - star_xVelocity;
+                }
+                if(star_x>=FRAME_HEIGHT-star_img.getHeight(null)){
+                    star_y = star_y - star_yVelocity;
+                }
+
+                star_x = star_x + star_xVelocity;
+                star_y = star_y + star_yVelocity;
+
+                repaint();
+
             }
         };
 
@@ -252,6 +281,19 @@ public class GameFrame extends JFrame{
         spock_btn.addActionListener(al);
         stopMusic_btn.addActionListener(al);
         playMusic_btn.addActionListener(al);
+    }
+
+    @Override
+    public void paint(Graphics g){
+        
+        //calls on the super class to enable repaint method
+        super.paint(g);
+
+        //casts Graphics variable g as Graphics2D. 
+        Graphics2D g2D = (Graphics2D) g;
+
+        g2D.drawImage(star_img, 0,0, null);
+        
     }
 
     public void connectionToServer(){
