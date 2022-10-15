@@ -4,6 +4,37 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
+
+class styledButton extends BasicButtonUI {
+
+    @Override
+    public void installUI (JComponent c) {
+        super.installUI(c);
+        AbstractButton button = (AbstractButton) c;
+        button.setOpaque(false);
+        button.setBorder(new EmptyBorder(5, 15, 5, 15));
+    }
+
+    @Override
+    public void paint (Graphics g, JComponent c) {
+        AbstractButton b = (AbstractButton) c;
+        paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+        super.paint(g, c);
+    }
+
+    private void paintBackground (Graphics g, JComponent c, int yOffset) {
+        Dimension size = c.getSize();
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(c.getBackground().darker());
+        g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 10, 10);
+        g.setColor(c.getBackground());
+        g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
+    }
+}
+
 public class GameFrame extends JFrame{
     JButton rock_btn = new JButton();
     JButton paper_btn = new JButton();
@@ -137,32 +168,37 @@ public class GameFrame extends JFrame{
          rock_btn.setText("Rock"); 
          rock_btn.setFont(new Font("Arial", Font.BOLD, 18));
          rock_btn.setBackground(Color.decode("#dca9fc"));
+         rock_btn.setUI(new styledButton());
          rock_btn.setFocusable(false); 
-         
+                  
          paper_btn.setBounds(310, 400, 90, 50); 
          paper_btn.setText("Paper"); 
          paper_btn.setFont(new Font("Arial", Font.BOLD, 18));
          paper_btn.setBackground(Color.decode("#dca9fc"));
+         paper_btn.setUI(new styledButton());
          paper_btn.setFocusable(false); 
          
          scissors_btn.setBounds(420, 400, 90, 50); 
          scissors_btn.setText("Scissors"); 
          scissors_btn.setFont(new Font("Arial", Font.BOLD, 18));
          scissors_btn.setBackground(Color.decode("#dca9fc"));
+         scissors_btn.setUI(new styledButton());
          scissors_btn.setFocusable(false); 
         
          lizard_btn.setBounds(530, 400, 90, 50); 
          lizard_btn.setText("Lizard"); 
          lizard_btn.setFont(new Font("Arial", Font.BOLD, 18));
          lizard_btn.setBackground(Color.decode("#dca9fc"));
+         lizard_btn.setUI(new styledButton());
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(640, 400, 90, 50); 
          spock_btn.setText("Spock"); 
          spock_btn.setFont(new Font("Arial", Font.BOLD, 18));
          spock_btn.setBackground(Color.decode("#dca9fc"));
+         spock_btn.setUI(new styledButton());
          spock_btn.setFocusable(false); 
- 
+
          stopMusic_btn.setBounds(850,10,50,50);
          stopMusic_btn.setIcon(sound_img);
          stopMusic_btn.setFocusable(false);
