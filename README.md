@@ -1,1 +1,7 @@
-# CS218
+# Rock Paper Scissors Lizard Spock - Game
+
+## Introduction
+
+
+
+
