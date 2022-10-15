@@ -4,6 +4,8 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.imageio.ImageIO;
 
 class styledButton extends BasicButtonUI {
