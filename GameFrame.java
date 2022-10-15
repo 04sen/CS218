@@ -7,8 +7,7 @@ import java.net.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.imageio.ImageIO;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicButtonUI;
+
 
 class styledButton extends BasicButtonUI {
 
@@ -191,30 +190,35 @@ public class GameFrame extends JFrame{
          rock_btn.setText("Rock");
          rock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          rock_btn.setBackground(Color.decode("#dca9fc"));
+         rock_btn.setUI(new styledButton());
          rock_btn.setFocusable(false); 
          
          paper_btn.setBounds(340, 400, 90, 50); 
          paper_btn.setText("Paper"); 
          paper_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          paper_btn.setBackground(Color.decode("#dca9fc"));
+         paper_btn.setUI(new styledButton());
          paper_btn.setFocusable(false); 
          
          scissors_btn.setBounds(450, 400, 90, 50); 
          scissors_btn.setText("Scissors");
          scissors_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 16));
          scissors_btn.setBackground(Color.decode("#dca9fc"));
+         scissors_btn.setUI(new styledButton());
          scissors_btn.setFocusable(false); 
         
          lizard_btn.setBounds(560, 400, 90, 50); 
          lizard_btn.setText("Lizard"); 
          lizard_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          lizard_btn.setBackground(Color.decode("#dca9fc"));
+         lizard_btn.setUI(new styledButton());
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(670, 400, 90, 50); 
          spock_btn.setText("Spock"); 
          spock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          spock_btn.setBackground(Color.decode("#dca9fc"));
+         spock_btn.setUI(new styledButton());
          spock_btn.setFocusable(false); 
          
          stopMusic_btn.setBounds(850,10,50,50);
