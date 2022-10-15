@@ -36,6 +36,7 @@ public class GameFrame extends JFrame{
     JLabel lost_lb = new JLabel();
     JLabel win_lb = new JLabel();
     JLabel tie_lb = new JLabel();
+    JLabel points_lb = new JLabel();
 
     File audio_file;
     AudioInputStream audioStream;
@@ -43,24 +44,17 @@ public class GameFrame extends JFrame{
   
     int playerID;
     int playerChoice;
-    static int result1;
+    int points;
+    static int result;
 
     private ClientSideConnection csc;
    
     public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-        GameFrame p = new GameFrame();
-        p.connectionToServer();
-        p.setUpGUI();
-        p.setUpButtons();
-        p.showResult(); 
-    }
-
-    public GameFrame(){
-        try{
-            this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Imgs\\background.jpg")))));
-        } catch (IOException e) {
-            System.out.println("Unable to load background.");
-        }
+        GameFrame player = new GameFrame(); //creating object player
+        player.connectionToServer(); //connecting player to Server
+        player.setUpGUI(); //calling SetUpGUI to present the GUI to user
+        player.setUpButtons(); //Setting up functionality for all buttons
+        player.showResult(); //shows the results of the game within the GUI
     }
 
     public void setUpGUI() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
@@ -69,7 +63,6 @@ public class GameFrame extends JFrame{
          audioStream = AudioSystem.getAudioInputStream(audio_file);
          clip = AudioSystem.getClip();
          clip.open(audioStream);
-
 
          //Setting Bounds for Labels
          rock_lb.setText("You have chosen Rock!");
@@ -147,36 +140,42 @@ public class GameFrame extends JFrame{
          tie_lb.setVisible(false);
          tie_lb.setForeground(Color.decode("#ffb7c5"));
          tie_lb.setFont(new Font("Nyala", Font.PLAIN , 16));
+
+         points_lb.setText("Points: " + points);
+         points_lb.setBounds(845, 90, 500,50);
+         points_lb.setVisible(true);
+         points_lb.setForeground(Color.decode("#ffb7c5"));
+         points_lb.setFont(new Font("Nyala", Font.PLAIN , 16));
  
  
          //Setting Bounds for Buttons
          rock_btn.setBounds(230, 400, 90, 50); 
          rock_btn.setText("Rock");
-         rock_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         rock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          rock_btn.setBackground(Color.decode("#dca9fc"));
          rock_btn.setFocusable(false); 
          
          paper_btn.setBounds(340, 400, 90, 50); 
          paper_btn.setText("Paper"); 
-         paper_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         paper_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          paper_btn.setBackground(Color.decode("#dca9fc"));
          paper_btn.setFocusable(false); 
          
          scissors_btn.setBounds(450, 400, 90, 50); 
          scissors_btn.setText("Scissors");
-         scissors_btn.setFont(new Font("Arial", Font.BOLD , 18));
+         scissors_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 16));
          scissors_btn.setBackground(Color.decode("#dca9fc"));
          scissors_btn.setFocusable(false); 
         
          lizard_btn.setBounds(560, 400, 90, 50); 
          lizard_btn.setText("Lizard"); 
-         lizard_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         lizard_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          lizard_btn.setBackground(Color.decode("#dca9fc"));
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(670, 400, 90, 50); 
          spock_btn.setText("Spock"); 
-         spock_btn.setFont(new Font("Arial", Font.BOLD, 18));
+         spock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          spock_btn.setBackground(Color.decode("#dca9fc"));
          spock_btn.setFocusable(false); 
          
@@ -203,6 +202,9 @@ public class GameFrame extends JFrame{
          //Allows the JFrame to be Visible
          setVisible(true); 
  
+        //Adding a background Image to Frame
+         this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Imgs\\background.jpg")))));
+
          //adding buttons to Frame
          this.add(rock_btn);
          this.add(paper_btn);
@@ -224,6 +226,7 @@ public class GameFrame extends JFrame{
          this.add(win_lb);
          this.add(lost_lb);
          this.add(tie_lb);
+         this.add(points_lb);
           
          //Starting Background Audio once JFrame is opened
          clip.start();
@@ -234,48 +237,52 @@ public class GameFrame extends JFrame{
                 if(e.getSource() == rock_btn){ //if button is pressed by user
             
                     buttonsOff();//calls buttonsOff method
-                    tie_lb.setVisible(false);
+                    labelsOff();
                     rock_lb.setVisible(true); //shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 1;
                     csc.sendChoice(playerChoice);
-
+                    
                 }else if(e.getSource() == paper_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    labelsOff();
                     tie_lb.setVisible(false);
                     paper_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 2;
                     csc.sendChoice(playerChoice);
-        
+                    
                 }else if(e.getSource() == scissors_btn){ 
                     
                     buttonsOff();
+                    labelsOff();
                     tie_lb.setVisible(false);
                     scissors_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 3;
                     csc.sendChoice(playerChoice);
-        
+                    
                 }else if(e.getSource() == lizard_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    labelsOff();
                     tie_lb.setVisible(false);
                     lizard_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 4;
                     csc.sendChoice(playerChoice);
-        
+                    
                 }else if(e.getSource() == spock_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
+                    labelsOff();
                     tie_lb.setVisible(false);
                     spock_lb.setVisible(true);//shows label in Jframe
                     waiting_lb.setVisible(true);
                     playerChoice = 5;
                     csc.sendChoice(playerChoice);
-
+                    
                 }else if(e.getSource() == stopMusic_btn){
                     clip.stop();
                     stopMusic_btn.setVisible(false);
@@ -333,22 +340,25 @@ public class GameFrame extends JFrame{
 
         public void getResult(){
             try { 
-                result1 = dis.readInt();
+                result = dis.readInt();
 
-                if(result1 == -1){
+                if(result == -1){
                     waiting_lb.setVisible(false);
                     tie_lb.setVisible(true);
                     buttionsOn();
 
-                }else if(result1 == 1){
-                    System.out.println(result1);
+                }else if(result == 1){
                     waiting_lb.setVisible(false);
                     win_lb.setVisible(true);
+                    points = points + result;
+                    points_lb.setText("Points: " + points);
+                    System.out.println(points);
+                    buttionsOn();
 
-                }else if(result1 == 0){
-                    System.out.println(result1);
+                }else if(result == 0){
                     waiting_lb.setVisible(false);
                     lost_lb.setVisible(true);
+                    buttionsOn();
                 }
 
             } catch (IOException e) {
@@ -363,6 +373,11 @@ public class GameFrame extends JFrame{
         }
     }
 
+    public void labelsOff(){
+        tie_lb.setVisible(false);
+        win_lb.setVisible(false);
+        lost_lb.setVisible(false);
+    }
 
     //Method to Disable all Buttons
     public void buttonsOff(){
@@ -373,7 +388,7 @@ public class GameFrame extends JFrame{
         spock_btn.setEnabled(false);
     }
 
-    //Method to enable all Buttons
+    //Method to Enable all Buttons
     public void buttionsOn(){
         //sets buttons to be enabled
         rock_btn.setEnabled(true);
@@ -389,7 +404,5 @@ public class GameFrame extends JFrame{
         lizard_lb.setVisible(false);
         spock_lb.setVisible(false);
         waiting_lb.setVisible(false);
-        win_lb.setVisible(false);
-        lost_lb.setVisible(false);
     }
 }
