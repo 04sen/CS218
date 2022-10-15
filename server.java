@@ -1,29 +1,33 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
 public class server{
+    final int WIN_VALUE = 1;
+    final int LOSE_VALUE = 0;
+    final int TIE_VALUE = -1;
+    
     private ServerSocket ss;
     private int numPlayers;
-    public static int playerOneChoice = 0;
-    public static int playerTwoChoice = 0;
-    public static int playerThreeChoice = 0;
-    public static int result;
+    private int playerOneChoice = 0;
+    private int playerTwoChoice = 0;
+    private int playerThreeChoice = 0;
+
     private boolean playerOneWin;
     private boolean playerTwoWin;
     private boolean playerThreeWin;
     private boolean tie;
-    List<DataOutputStream> doss = new ArrayList<>();
 
     private ServerSideConnections player1;
     private ServerSideConnections player2;
     private ServerSideConnections player3;
 
     public server(){
-        System.out.println("------Server online-----");
-        numPlayers = 0;
+        System.out.println("------Server online-----"); //Prints server is online
+        numPlayers = 0; 
         try{
-            ss = new ServerSocket(51734);
-        }catch(IOException e){}
+            ss = new ServerSocket(51734); 
+        }catch(IOException e){
+            System.out.println("---Error in server Constructor---");
+        }
     }
 
     public static void main(String[] args) {
@@ -37,8 +41,11 @@ public class server{
             while(numPlayers < 3){
                 Socket socket = ss.accept();
                 numPlayers++;
+
                 System.out.println("Player #: " + numPlayers + " has connectioned.");
                 ServerSideConnections ssc = new ServerSideConnections(socket, numPlayers);
+
+                //Creates new Server Side Connections per Player
                 if (numPlayers == 1)
                 {
                     player1 = ssc;
@@ -54,8 +61,12 @@ public class server{
                 Thread thread = new Thread(ssc);
                 thread.start();
             }
-        }catch(IOException e){}
+            System.out.println("---Please Upgrage to Platnium Server Package to enable more players to join---");
+        }catch(IOException e){
+            System.out.println("---Error in acceptConnections() Method---");
+        }
     }
+    //Class to handle Server Side Connections
     private class ServerSideConnections implements Runnable{
         private Socket socket;
         private DataInputStream dis;
@@ -69,9 +80,12 @@ public class server{
             try{
                 dis = new DataInputStream(socket.getInputStream());
                 dos = new DataOutputStream(socket.getOutputStream());
-            }catch (IOException e){}
+            }catch (IOException e){
+                System.out.println("---Error in ServerSideConnections Constructor---");
+            }
         }
 
+        //Method to Reset all PlayerChoices recorded in Server
         private void resetPlayerChoice(){
             playerOneChoice = 0;
             playerTwoChoice = 0;
@@ -81,10 +95,10 @@ public class server{
         @Override
         public void run(){
             try{
-                dos.writeInt(playerID);
+                dos.writeInt(playerID); //Sends playerID intomation to Client
                 dos.flush();
 
-                while(true){
+                while(true){//in a loop so enable players to keep playing
                     if(playerID == 1){
                         playerOneChoice = dis.readInt();
                         System.out.println("Player One has chosen: " + playerOneChoice);
@@ -107,52 +121,55 @@ public class server{
                     //calls checkWin method
                     checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
                         
+                    //if and else block to send correct infomation to each user
                     if(tie == true){
-                        player1.dos.writeInt(-1);
-                        player2.dos.writeInt(-1);
-                        player3.dos.writeInt(-1);
+                        player1.dos.writeInt(TIE_VALUE);
+                        player2.dos.writeInt(TIE_VALUE);
+                        player3.dos.writeInt(TIE_VALUE);
 
                         resetPlayerChoice();
                         
                     }else if(playerOneWin == true && playerTwoWin == true){
-                        player1.dos.writeInt(1);
-                        player2.dos.writeInt(1);
-                        player3.dos.writeInt(0);
+                        player1.dos.writeInt(WIN_VALUE);
+                        player2.dos.writeInt(WIN_VALUE);
+                        player3.dos.writeInt(LOSE_VALUE);
 
                         resetPlayerChoice();
                         
                     }else if(playerTwoWin == true && playerThreeWin == true){
-                        player1.dos.writeInt(0);
-                        player2.dos.writeInt(1);
-                        player3.dos.writeInt(1);
+                        player1.dos.writeInt(LOSE_VALUE);
+                        player2.dos.writeInt(WIN_VALUE);
+                        player3.dos.writeInt(WIN_VALUE);
                         
                         resetPlayerChoice();
                         
                     }else if(playerOneWin == true){
-                        player1.dos.writeInt(1);
-                        player2.dos.writeInt(0);
-                        player3.dos.writeInt(0);
+                        player1.dos.writeInt(WIN_VALUE);
+                        player2.dos.writeInt(LOSE_VALUE);
+                        player3.dos.writeInt(LOSE_VALUE);
 
                         resetPlayerChoice();
                         
                     }else if(playerTwoWin == true){
-                        player1.dos.writeInt(0);
-                        player2.dos.writeInt(1);
-                        player3.dos.writeInt(0);
+                        player1.dos.writeInt(LOSE_VALUE);
+                        player2.dos.writeInt(WIN_VALUE);
+                        player3.dos.writeInt(LOSE_VALUE);
 
                         resetPlayerChoice();
                         
                     }else if(playerThreeWin == true){
-                        player1.dos.writeInt(0);
-                        player2.dos.writeInt(0);
-                        player3.dos.writeInt(1);
+                        player1.dos.writeInt(LOSE_VALUE);
+                        player2.dos.writeInt(LOSE_VALUE);
+                        player3.dos.writeInt(WIN_VALUE);
 
                         resetPlayerChoice();
                     }
                 }
                 
             
-            }catch(IOException e){}
+            }catch(IOException e){
+                System.out.println("---Error in SeverSideConnections, Run() Method---");
+            }
         }
 
         //method to check Win condition of RPSLS and sets boolean values accordingly

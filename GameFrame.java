@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.imageio.ImageIO;
 
+
 class styledButton extends BasicButtonUI {
 
     @Override
@@ -37,6 +38,12 @@ class styledButton extends BasicButtonUI {
 }
 
 public class GameFrame extends JFrame{
+    final int FRAME_WIDTH = 1000;
+    final int FRAME_HEIGHT = 700;
+    final int WIN_CONDITION = 1;
+    final int LOSE_CONDITION = 0;
+    final int TIE_CONDITION = -1;
+
     JButton rock_btn = new JButton();
     JButton paper_btn = new JButton();
     JButton scissors_btn = new JButton();
@@ -73,8 +80,8 @@ public class GameFrame extends JFrame{
     Clip clip;
   
     int playerID;
-    int playerChoice;
-    int points;
+    static int playerChoice;
+    static int points;
     static int result;
 
     private ClientSideConnection csc;
@@ -183,47 +190,49 @@ public class GameFrame extends JFrame{
          rock_btn.setText("Rock");
          rock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          rock_btn.setBackground(Color.decode("#dca9fc"));
-		 rock_btn.setUI(new styledButton());
+         rock_btn.setUI(new styledButton());
          rock_btn.setFocusable(false); 
          
          paper_btn.setBounds(340, 400, 90, 50); 
          paper_btn.setText("Paper"); 
          paper_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          paper_btn.setBackground(Color.decode("#dca9fc"));
-		 paper_btn.setUI(new styledButton());
+         paper_btn.setUI(new styledButton());
          paper_btn.setFocusable(false); 
          
          scissors_btn.setBounds(450, 400, 90, 50); 
          scissors_btn.setText("Scissors");
          scissors_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 16));
          scissors_btn.setBackground(Color.decode("#dca9fc"));
-		 scissors_btn.setUI(new styledButton());
+         scissors_btn.setUI(new styledButton());
          scissors_btn.setFocusable(false); 
         
          lizard_btn.setBounds(560, 400, 90, 50); 
          lizard_btn.setText("Lizard"); 
          lizard_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          lizard_btn.setBackground(Color.decode("#dca9fc"));
-		 lizard_btn.setUI(new styledButton());
+         lizard_btn.setUI(new styledButton());
          lizard_btn.setFocusable(false); 
          
          spock_btn.setBounds(670, 400, 90, 50); 
          spock_btn.setText("Spock"); 
          spock_btn.setFont(new Font("Harlow Solid Italic", Font.BOLD, 18));
          spock_btn.setBackground(Color.decode("#dca9fc"));
-		 spock_btn.setUI(new styledButton());
+         spock_btn.setUI(new styledButton());
          spock_btn.setFocusable(false); 
          
          stopMusic_btn.setBounds(850,10,50,50);
          stopMusic_btn.setIcon(sound_img);
          stopMusic_btn.setFocusable(false);
          stopMusic_btn.setBackground(Color.decode("#dca9fc"));
+         stopMusic_btn.setUI(new styledButton());
          
          playMusic_btn.setBounds(850,10,50,50);
          playMusic_btn.setIcon(mute_img);
          playMusic_btn.setVisible(false);
          playMusic_btn.setFocusable(false);
          playMusic_btn.setBackground(Color.decode("#dca9fc"));
+         playMusic_btn.setUI(new styledButton());
          
          //Setting Bounds for the JFrame
          this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -236,11 +245,11 @@ public class GameFrame extends JFrame{
  
          //Allows the JFrame to be Visible
          setVisible(true); 
- 
-        //Adding a background Image to Frame
-         this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Imgs\\background.jpg")))));
 
-         //adding buttons to Frame
+         //Adding Background Img to JFrame
+         this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("Imgs\\background.jpg")))));
+         
+         //Adding buttons to Frame
          this.add(rock_btn);
          this.add(paper_btn);
          this.add(scissors_btn);
@@ -249,7 +258,7 @@ public class GameFrame extends JFrame{
          this.add(stopMusic_btn);
          this.add(playMusic_btn);
  
-         //adding labels to Frame
+         //Adding labels to Frame
          this.add(rock_lb);
          this.add(paper_lb);
          this.add(scissors_lb);
@@ -266,70 +275,72 @@ public class GameFrame extends JFrame{
          //Starting Background Audio once JFrame is opened
          clip.start();
     }
+
+    //Method for implementing changes due to user input
     public void setUpButtons(){
         ActionListener al = new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 if(e.getSource() == rock_btn){ //if button is pressed by user
             
                     buttonsOff();//calls buttonsOff method
-                    labelsOff();
-                    rock_lb.setVisible(true); //shows label in Jframe
-                    waiting_lb.setVisible(true);
-                    playerChoice = 1;
-                    csc.sendChoice(playerChoice);
+                    labelsOff();//calls labelsOff method
+                    rock_lb.setVisible(true); //shows user has chosen rock in GUI
+                    waiting_lb.setVisible(true);//displays a waiting message in GUi
+                    playerChoice = 1; //Sets playerChoice as 1
+                    csc.sendChoice(playerChoice);//calls sendChoice method to send player Choice to Server
                     
                 }else if(e.getSource() == paper_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
                     labelsOff();
                     tie_lb.setVisible(false);
-                    paper_lb.setVisible(true);//shows label in Jframe
+                    paper_lb.setVisible(true);//shows user has chosen paper in GUI
                     waiting_lb.setVisible(true);
-                    playerChoice = 2;
+                    playerChoice = 2; //sets playerChoice as 2
                     csc.sendChoice(playerChoice);
                     
                 }else if(e.getSource() == scissors_btn){ 
                     
                     buttonsOff();
                     labelsOff();
-                    tie_lb.setVisible(false);
-                    scissors_lb.setVisible(true);//shows label in Jframe
+                    scissors_lb.setVisible(true);//shows user has chosen scissors in GUI
                     waiting_lb.setVisible(true);
-                    playerChoice = 3;
+                    playerChoice = 3; //sets playerChoice as 3
                     csc.sendChoice(playerChoice);
                     
                 }else if(e.getSource() == lizard_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
                     labelsOff();
-                    tie_lb.setVisible(false);
-                    lizard_lb.setVisible(true);//shows label in Jframe
+                    lizard_lb.setVisible(true);//shows user has chosen lizard in GUI
                     waiting_lb.setVisible(true);
-                    playerChoice = 4;
+                    playerChoice = 4; //sets playerChoice as 4
                     csc.sendChoice(playerChoice);
                     
                 }else if(e.getSource() == spock_btn){ 
                     
                     buttonsOff();//calls buttonsOff method
                     labelsOff();
-                    tie_lb.setVisible(false);
-                    spock_lb.setVisible(true);//shows label in Jframe
+                    spock_lb.setVisible(true);//shows user has chosen Spock in GUI
                     waiting_lb.setVisible(true);
-                    playerChoice = 5;
+                    playerChoice = 5; //sets playerChoice as 5
                     csc.sendChoice(playerChoice);
                     
                 }else if(e.getSource() == stopMusic_btn){
-                    clip.stop();
-                    stopMusic_btn.setVisible(false);
-                    playMusic_btn.setVisible(true);
+                    clip.stop(); //stops background music
+                    stopMusic_btn.setVisible(false); //disables stopMusic button
+                    playMusic_btn.setVisible(true); //enables playMusic button
+
                 }else if(e.getSource() == playMusic_btn){
-                    clip.start();
-                    playMusic_btn.setVisible(false);
-                    stopMusic_btn.setVisible(true);
+                    clip.start(); //resumes background music
+                    playMusic_btn.setVisible(false); //disables playMusic button
+                    stopMusic_btn.setVisible(true); //enables stopMusicbutton
+
                 }
             }
         };
 
+        //Adds buttons to ActionListener
         rock_btn.addActionListener(al);
         paper_btn.addActionListener(al);
         scissors_btn.addActionListener(al);
@@ -339,11 +350,40 @@ public class GameFrame extends JFrame{
         playMusic_btn.addActionListener(al);
     }
 
+    //Method to create a ClientSideConnection Object
     public void connectionToServer(){
         csc = new ClientSideConnection();
     }
 
-    public class ClientSideConnection{ 
+    class styledButton extends BasicButtonUI {
+        @Override
+        public void installUI (JComponent c) {
+            super.installUI(c);
+            AbstractButton button = (AbstractButton) c;
+            button.setOpaque(false);
+            button.setBorder(new EmptyBorder(5, 15, 5, 15));
+        }
+    
+        @Override
+        public void paint (Graphics g, JComponent c) {
+            AbstractButton b = (AbstractButton) c;
+            paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+            super.paint(g, c);
+        }
+    
+        private void paintBackground (Graphics g, JComponent c, int yOffset) {
+            Dimension size = c.getSize();
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setColor(c.getBackground().darker());
+            g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 10, 10);
+            g.setColor(c.getBackground());
+            g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
+        }
+    }
+
+    //Inner Class for Client Side Connections
+    private class ClientSideConnection{ 
         private DataInputStream dis;
         private DataOutputStream dos;
         private Socket socket;
@@ -356,14 +396,14 @@ public class GameFrame extends JFrame{
                 dis = new DataInputStream(socket.getInputStream());
                 dos = new DataOutputStream(socket.getOutputStream());
 
-                playerID = dis.readInt();
+                playerID = dis.readInt(); //reads data from server and stores as playerID 
                 
-            
             } catch (IOException e) {
                 System.out.println("Error in ClientSideConnection constructor");
             }
         }
 
+        //Method to send user picked button choice to server
         public void sendChoice(int n){
             try{
                 dos.writeInt(n);
@@ -373,24 +413,25 @@ public class GameFrame extends JFrame{
             }
         }
 
+        //method to read result from server
         public void getResult(){
             try { 
-                result = dis.readInt();
+                result = dis.readInt(); //reads data from server and stores as result
 
-                if(result == -1){
-                    waiting_lb.setVisible(false);
-                    tie_lb.setVisible(true);
-                    buttionsOn();
+                if(result == TIE_CONDITION){//if Tie
+                    waiting_lb.setVisible(false);//diables waiting message
+                    tie_lb.setVisible(true);//shows user that it was a tie
+                    buttionsOn();//turns all buttons on 
 
-                }else if(result == 1){
+                }else if(result == WIN_CONDITION){// if User Wins
                     waiting_lb.setVisible(false);
                     win_lb.setVisible(true);
-                    points = points + result;
-                    points_lb.setText("Points: " + points);
-                    System.out.println(points);
-                    buttionsOn();
 
-                }else if(result == 0){
+                    points++; //updates points value by 1
+                    points_lb.setText("Points: " + points); //allows user to see new points value
+                    buttionsOn();//Turns buttons back on to allow for continuation of game
+
+                }else if(result == LOSE_CONDITION){
                     waiting_lb.setVisible(false);
                     lost_lb.setVisible(true);
                     buttionsOn();
@@ -402,12 +443,14 @@ public class GameFrame extends JFrame{
         }
     }
 
+    //Method for implementing Result tracking from Server
     public void showResult(){
-        while(true){
+        while(true){// in a while loop to ensure game can keep going. 
             csc.getResult();
         }
     }
 
+    //Method to Disable Middle Labels
     public void labelsOff(){
         tie_lb.setVisible(false);
         win_lb.setVisible(false);
