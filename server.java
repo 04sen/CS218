@@ -72,6 +72,12 @@ public class server{
             }catch (IOException e){}
         }
 
+        private void resetPlayerChoice(){
+            playerOneChoice = 0;
+            playerTwoChoice = 0;
+            playerThreeChoice = 0;
+        }
+
         @Override
         public void run(){
             try{
@@ -92,7 +98,13 @@ public class server{
                         System.out.println("Player Three has chosen: " + playerThreeChoice);
                     }
                     
+                    //Resets Win or Tie Conditions to false every loop
                     tie = false;
+                    playerOneWin = false;
+                    playerTwoWin = false;
+                    playerThreeWin = false;
+
+                    //calls checkWin method
                     checkWin(playerOneChoice, playerTwoChoice, playerThreeChoice);
                         
                     if(tie == true){
@@ -100,33 +112,42 @@ public class server{
                         player2.dos.writeInt(-1);
                         player3.dos.writeInt(-1);
 
-                        playerOneChoice = 0;
-                        playerTwoChoice = 0;
-                        playerThreeChoice = 0;
+                        resetPlayerChoice();
                         
                     }else if(playerOneWin == true && playerTwoWin == true){
                         player1.dos.writeInt(1);
                         player2.dos.writeInt(1);
                         player3.dos.writeInt(0);
+
+                        resetPlayerChoice();
+                        
                     }else if(playerTwoWin == true && playerThreeWin == true){
                         player1.dos.writeInt(0);
                         player2.dos.writeInt(1);
                         player3.dos.writeInt(1);
-
+                        
+                        resetPlayerChoice();
+                        
                     }else if(playerOneWin == true){
                         player1.dos.writeInt(1);
                         player2.dos.writeInt(0);
                         player3.dos.writeInt(0);
 
+                        resetPlayerChoice();
+                        
                     }else if(playerTwoWin == true){
                         player1.dos.writeInt(0);
                         player2.dos.writeInt(1);
                         player3.dos.writeInt(0);
 
+                        resetPlayerChoice();
+                        
                     }else if(playerThreeWin == true){
                         player1.dos.writeInt(0);
                         player2.dos.writeInt(0);
                         player3.dos.writeInt(1);
+
+                        resetPlayerChoice();
                     }
                 }
                 
