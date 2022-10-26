@@ -1,7 +1,9 @@
 # Rock Paper Scissors Lizard Spock - 3 Player Game
 
 ## Introduction
-    Rock Paper Scissors Lizard Spock is a world renowned twist on the classic Rock Paper Scissors game made famous by Dr. Sheldon Cooper from The Big Bang Theory (Season 2 Episode 8).
+    Rock Paper Scissors Lizard Spock is a world renowned
+    twist on the classic Rock Paper Scissors game made famous by 
+    Dr. Sheldon Cooper from The Big Bang Theory (Season 2 Episode 8).
 
 The Rules are Simple:
 
